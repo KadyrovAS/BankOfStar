@@ -35,7 +35,7 @@ public class StarRepositoryPart02{
             return rulesJdbcTemplate.queryForObject(
                     sql,
                     this::mapRowToRule,
-                    id
+                    id.toString()
             );
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -61,7 +61,7 @@ public class StarRepositoryPart02{
         }
 
         rulesJdbcTemplate.update(sql,
-                id,
+                id.toString(),
                 rule.getQuery(),
                 argument01.orElse(""),
                 argument02.orElse(""),
@@ -94,7 +94,7 @@ public class StarRepositoryPart02{
         List<UUID> rulesId = rulesJdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> UUID.fromString(rs.getString("RULE_ID")),
-                id
+                id.toString()
         );
 
         if (rulesId.isEmpty()) {
@@ -116,7 +116,7 @@ public class StarRepositoryPart02{
                         rs.getString("TEXT"),
                         rules
                 ),
-                id
+                id.toString()
         );
     }
 
@@ -143,8 +143,8 @@ public class StarRepositoryPart02{
             ruleId = UUID.randomUUID();
             rulesJdbcTemplate.update(
                     sql,
-                    id,
-                    ruleId
+                    id.toString(),
+                    ruleId.toString()
             );
             insertRule(rule, ruleId);
         }
@@ -168,7 +168,7 @@ public class StarRepositoryPart02{
             List<UUID> rulesId = rulesJdbcTemplate.query(
                     sql,
                     (rs, rowNum) -> UUID.fromString(rs.getString("RULE_ID")),
-                    id
+                    id.toString()
             );
 
             sql = "DELETE FROM RULE_TO_RECOMMENDATION WHERE RECOMMENDATION_ID = ?";
@@ -214,7 +214,7 @@ public class StarRepositoryPart02{
                         rs.getString("TRANSACTION_TYPE"),
                         rs.getString("PRODUCT_TYPE")
                 ),
-                id
+                id.toString()
         );
     }
 

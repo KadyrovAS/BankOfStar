@@ -27,14 +27,27 @@ public class DataSourceConfiguration {
         return dataSource;
     }
 
+//    @Bean(name = "rulesDataSourcePart02")
+//    public DataSource rulesDataSourcePart02(@Value("${application.rules.part02.url}") String rulesUrl){
+//        HikariDataSource dataSource = new HikariDataSource();
+//        dataSource.setJdbcUrl(rulesUrl);
+//        dataSource.setDriverClassName("org.h2.Driver");
+//        return dataSource;
+//    }
+
     @Bean(name = "rulesDataSourcePart02")
-    public DataSource rulesDataSourcePart02(@Value("${application.rules.part02.url}") String rulesUrl){
+    public DataSource rulesDataSourcePart02(
+            @Value("${application.rules.part02.url}") String url,
+            @Value("${application.rules.part02.username}") String username,
+            @Value("${application.rules.part02.password}") String password
+    ) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(rulesUrl);
-        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;
     }
-
 
     @Bean
     public DataSourceInitializer rulesDataSourceInitializerPart01(
@@ -56,7 +69,7 @@ public class DataSourceConfiguration {
         initializer.setDataSource(dataSource);
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("schema-init_part02.sql"));
+        populator.addScript(new ClassPathResource("liquibase/scripts/schema-init_part02.sql"));
 
         initializer.setDatabasePopulator(populator);
         return initializer;

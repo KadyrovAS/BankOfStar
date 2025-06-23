@@ -9,7 +9,6 @@ public class Rule{
 
     private boolean negative;
 
-
     public Rule(String query, String[] arguments, boolean negative) {
         this.query = query;
         this.arguments = arguments;
