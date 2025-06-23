@@ -13,5 +13,4 @@ public interface RecommendationRuleSet {
     void addRecommendation(Recommendation recommendation);
     void deleteRecommendation(UUID id);
     List<Recommendation>findAllRecommendations();
-    List<Transaction>getTransactionsByUserId(UUID id);
 }

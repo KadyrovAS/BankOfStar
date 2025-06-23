@@ -1,5 +1,7 @@
 package star.part02.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,30 +26,58 @@ public class RecommendationControllerPart02 {
     }
 
     @GetMapping(value = "/recommendation/{id}")
+    @Operation(
+            summary = "Получить рекомендации для клиента по ID",
+            description = "Возвращает список рекомендаций для клиента"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Сформирован список рекомендаций, либо пустой массив, если рекомендаций нет"
+    )
     public ResponseEntity<List<Recommendation>> findRecommendationById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.findRecommendationById(id).orElse(Collections.emptyList()));
     }
 
     @GetMapping(value = "/allRecommendations")
+    @Operation(
+            summary = "Получить список всех рекомендаций банка",
+            description = "Возвращает список всех рекомендаций банка со списком правил для каждой рекомендации"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Сформирован полный список всех имеющихся рекомендаций"
+    )
     public List<Recommendation>findAllRecommendations(){
         return service.findAllRecommendations();
     }
 
     @PutMapping
+    @Operation(
+            summary = "Добавить рекомендацию со списком правил",
+            description = "Добавляет рекомендацию со списком правил"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Рекомендация со списком правил добавлена"
+    )
     public void insertRecommendation(@RequestBody Recommendation recommendation) {
         logger.info("insertRecommendation: {}", recommendation);
         service.addRecommendation(recommendation);
     }
 
+
     @DeleteMapping
+    @Operation(
+            summary = "Удалить рекомендацию вместе со списком правил, которые должны выполняться",
+            description = "Удаляет рекомендацию вместе со списком правил по заданному id"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Рекомендация с заданным id удалена"
+    )
     public void deleteRecommendation(@RequestBody UUID id) {
         logger.info("deleteRecommendation: {}", id);
         service.deleteRecommendation(id);
-    }
-
-    @GetMapping(value = "/transactions/{id}")
-    public List<Transaction> findAllTransactionsById(@PathVariable UUID id) {
-        return service.getTransactionsByUserId(id);
     }
 
 }

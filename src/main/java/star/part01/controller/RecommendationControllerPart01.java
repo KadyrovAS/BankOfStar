@@ -35,7 +35,6 @@ public class RecommendationControllerPart01 {
             responseCode = "200",
             description = "Сформирован список рекомендаций, либо пустой массив, если рекомендаций нет"
     )
-
     public ResponseEntity<Recommendations> getRecommendation(@PathVariable UUID id){
         logger.info("Запрос рекомендации для {}", id);
         return ResponseEntity.ok(service.getRecommendation(id).orElse(new Recommendations(id, new Recommendation[0])));

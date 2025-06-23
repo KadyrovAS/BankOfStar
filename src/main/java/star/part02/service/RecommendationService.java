@@ -130,8 +130,4 @@ public class RecommendationService implements RecommendationRuleSet{
         } else return arg1 <= arg2 && comp.equals("<=");
     }
 
-    @Override
-    public List<Transaction>getTransactionsByUserId(UUID id){
-        return repository.getAmountsByTypes(id);
-    }
 }
