@@ -9,6 +9,7 @@ import star.part02.model.Recommendation;
 import star.part02.model.Transaction;
 import star.part02.service.RecommendationRuleSet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class RecommendationControllerPart02 {
 
     @GetMapping(value = "/recommendation/{id}")
     public ResponseEntity<List<Recommendation>> findRecommendationById(@PathVariable UUID id) {
-        return ResponseEntity.ok(service.findRecommendationById(id).orElse(null));
+        return ResponseEntity.ok(service.findRecommendationById(id).orElse(Collections.emptyList()));
     }
 
     @GetMapping(value = "/allRecommendations")
