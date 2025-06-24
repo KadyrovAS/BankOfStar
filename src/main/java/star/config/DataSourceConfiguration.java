@@ -27,14 +27,6 @@ public class DataSourceConfiguration {
         return dataSource;
     }
 
-//    @Bean(name = "rulesDataSourcePart02")
-//    public DataSource rulesDataSourcePart02(@Value("${application.rules.part02.url}") String rulesUrl){
-//        HikariDataSource dataSource = new HikariDataSource();
-//        dataSource.setJdbcUrl(rulesUrl);
-//        dataSource.setDriverClassName("org.h2.Driver");
-//        return dataSource;
-//    }
-
     @Bean(name = "rulesDataSourcePart02")
     public DataSource rulesDataSourcePart02(
             @Value("${application.rules.part02.url}") String url,
@@ -75,7 +67,6 @@ public class DataSourceConfiguration {
         return initializer;
     }
 
-
     @Bean(name = "transactionsDataSource")
     public DataSource transactionsDataSource(@Value("${application.transactions-db.url}") String transactionsUrl) {
         HikariDataSource dataSource = new HikariDataSource();
@@ -85,14 +76,12 @@ public class DataSourceConfiguration {
         return dataSource;
     }
 
-
     @Bean(name = "transactionsJdbcTemplate")
     public JdbcTemplate transactionsJdbcTemplate(
             @Qualifier("transactionsDataSource") DataSource dataSource
     ) {
         return new JdbcTemplate(dataSource);
     }
-
 
     @Bean(name = "rulesJdbcTemplatePart01")
     public JdbcTemplate rulesJdbcTemplatePart01(
