@@ -1,8 +1,11 @@
 package star.config;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -11,6 +14,7 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class DataSourceConfiguration {
@@ -24,13 +28,18 @@ public class DataSourceConfiguration {
     }
 
     @Bean(name = "rulesDataSourcePart02")
-    public DataSource rulesDataSourcePart02(@Value("${application.rules.part02.url}") String rulesUrl){
+    public DataSource rulesDataSourcePart02(
+            @Value("${application.rules.part02.url}") String url,
+            @Value("${application.rules.part02.username}") String username,
+            @Value("${application.rules.part02.password}") String password
+    ) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(rulesUrl);
-        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;
     }
-
 
     @Bean
     public DataSourceInitializer rulesDataSourceInitializerPart01(
@@ -52,12 +61,11 @@ public class DataSourceConfiguration {
         initializer.setDataSource(dataSource);
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("schema-init_part02.sql"));
+        populator.addScript(new ClassPathResource("liquibase/scripts/schema-init_part02.sql"));
 
         initializer.setDatabasePopulator(populator);
         return initializer;
     }
-
 
     @Bean(name = "transactionsDataSource")
     public DataSource transactionsDataSource(@Value("${application.transactions-db.url}") String transactionsUrl) {
@@ -68,14 +76,12 @@ public class DataSourceConfiguration {
         return dataSource;
     }
 
-
     @Bean(name = "transactionsJdbcTemplate")
     public JdbcTemplate transactionsJdbcTemplate(
             @Qualifier("transactionsDataSource") DataSource dataSource
     ) {
         return new JdbcTemplate(dataSource);
     }
-
 
     @Bean(name = "rulesJdbcTemplatePart01")
     public JdbcTemplate rulesJdbcTemplatePart01(
@@ -91,4 +97,14 @@ public class DataSourceConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
+    @Bean
+    public CacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCaffeine(Caffeine.newBuilder()
+                .initialCapacity(100)
+                .maximumSize(500)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .recordStats());
+        return cacheManager;
+    }
 }

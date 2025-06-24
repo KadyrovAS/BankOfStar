@@ -1,4 +1,4 @@
-package star;
+package star.part01;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,7 +28,7 @@ public class StarApplicationRestTemplateTest{
     private UUID id = UUID.fromString("cd515076-5d8a-44be-930e-8d4fcb79f42d");
 
     private String getUrl(){
-        return "http://localhost:" + port + "/recommendation/" + id;
+        return "http://localhost:" + port + "/part01/recommendation/" + id;
     }
 
     @Test

@@ -1,4 +1,4 @@
-package star;
+package star.part01;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -45,7 +45,7 @@ public class StarApplicationWebMvcTest{
         Mockito.when(service.getRecommendation(any(UUID.class)))
                 .thenReturn(Optional.of(expectedResponse));
 
-        mockMvc.perform(get("/recommendation/{id}", id)
+        mockMvc.perform(get("/part01/recommendation/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -60,7 +60,7 @@ public class StarApplicationWebMvcTest{
         Mockito.when(service.getRecommendation(any(UUID.class)))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/recommendation/{id}", id)
+        mockMvc.perform(get("/part01/recommendation/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ public class StarApplicationWebMvcTest{
 
     @Test
     public void getRecommendationsTest_ShouldHandleInvalidIdFormat() throws Exception {
-        mockMvc.perform(get("/recommendation/{id}", "invalid-uuid")
+        mockMvc.perform(get("/part01/recommendation/{id}", "invalid-uuid")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
